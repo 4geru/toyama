@@ -1,15 +1,14 @@
 require 'uri'
 def replyText(event)
-  user_id = event["source"]["userId"]
-
-  status = User.where({user_id: user_id}).first.status
+  user = User.where({user_id: event["source"]["userId"]}).first
+  status = User.where({user_id: event["source"]["userId"]}).first.status
   if status == nil
     if event.message['text'] == "追加"
       actions = [
         { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/location/" },
         { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
       ]
-      User.where({user_id: user_id}).first.update({status: 'settingPlace'})
+      user.update({status: 'settingPlace'})
       message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
       client.reply_message(event['replyToken'], message)
     elsif event.message['text'] == "聞く"
@@ -17,8 +16,16 @@ def replyText(event)
         { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/location/" },
         { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
       ]
-      User.where({user_id: user_id}).first.update({status: 'settingPlace'})
+      user.update({status: 'settingPlace'})
       message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
+      client.reply_message(event['replyToken'], message)
+    elsif event.message['text'] == "写真"
+      actions = [
+        { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/camera/" },
+        { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
+      ]
+      user.update({status: 'uploadPhoto'})
+      message = Confirm.new("あんたカメラの情報教えてくれっけぇ", "写真アップロード確認中").create(actions)
       client.reply_message(event['replyToken'], message)
     else
       message = {

@@ -12,7 +12,6 @@ def replyPostBack(event)
     puts ">> place"
     puts place
     place.update({name: data["name"]})
-
   end
   user.update({status: nil})
 end
