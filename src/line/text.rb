@@ -6,11 +6,11 @@ def replyText(event)
   if status == nil
     if event.message['text'] == "追加"
       actions = [
-        { "type": "uri", "label": "Yes", "text": "追加します", "uri": "line://nv/location/" },
-        { "type": "message", "label": "No", "text": "追加しません" }
+        { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/location/" },
+        { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
       ]
       User.where({user_id: user_id}).first.update({status: 'settingPlace'})
-      message = Confirm.new("場所情報を登録するのじゃ", "場所情報登録中").create(actions)
+      message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
       client.reply_message(event['replyToken'], message)
     else
       message = {
