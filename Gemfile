@@ -11,6 +11,10 @@ gem 'line-bot-api'
 gem "rspec", ">= 3.0.0"
 
 gem 'dotenv'
+
+gem 'mini_magick'
+gem 'cloudinary'
+
 group :development do
   gem 'sqlite3'
   gem "simplecov"

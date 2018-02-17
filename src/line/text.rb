@@ -12,6 +12,14 @@ def replyText(event)
       User.where({user_id: user_id}).first.update({status: 'settingPlace'})
       message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
       client.reply_message(event['replyToken'], message)
+    elsif event.message['text'] == "聞く"
+      actions = [
+        { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/location/" },
+        { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
+      ]
+      User.where({user_id: user_id}).first.update({status: 'settingPlace'})
+      message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
+      client.reply_message(event['replyToken'], message)
     else
       message = {
         type: 'text',
