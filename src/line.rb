@@ -1,9 +1,12 @@
 # reload template
 require './src/Confirm'
+require './src/Button'
 # reload functions
 require './src/line/postback'
+require './src/line/join'
 require './src/line/text'
 require './src/line/location'
+require './src/line/image'
 
 require 'mini_magick'
 require 'cloudinary'
@@ -33,27 +36,26 @@ post '/callback' do
   events.each { |event|
     case event
     when Line::Bot::Event::Message
+      puts event.type
       User.find_or_create_by({user_id: event["source"]["userId"]})
+      if event["source"]["type"] == "group"
+        group = Group.where({group_id: event["source"]["groupId"]}).first
+        user  = User.where( {user_id:  event["source"]["userId"] }).first
+
+        UserGroup.find_or_create_by({group_id: group.id, user_id: user.id})
+      end
       case event.type
       when Line::Bot::Event::MessageType::Text
         replyText(event)
       when Line::Bot::Event::MessageType::Image
-        response = client.get_message_content(event.message['id'])
-        image = MiniMagick::Image.read(response.body)
-        imageName = SecureRandom.uuid
-        image.write("/tmp/#{imageName}.jpg")
-        result = Cloudinary::Uploader.upload("/tmp/#{imageName}.jpg")
-        image = Photo.create({
-          url: result['secure_url']
-        })
-
-        tf = Tempfile.open("content")
-        tf.write(response.body)
+        replyImage(event)
       when Line::Bot::Event::MessageType::Location
         replyLocation(event)
       end
     when Line::Bot::Event::Postback
       replyPostBack(event)
+    when Line::Bot::Event::Join
+      replyJoin(event)
     end
   }
   "OK"

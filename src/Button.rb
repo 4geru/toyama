@@ -1,22 +1,17 @@
 class Button
+  def initialize(text, altText)
+    @text = text
+    @altText = altText
+  end
 
   def create(action)
     {
       "type": "template",
-      "altText": "This is a buttons template",
+      "altText": @altText,
       "template": {
           "type": "buttons",
-          "thumbnailImageUrl": "https://example.com/bot/images/image.jpg",
-          "imageAspectRatio": "rectangle",
-          "imageSize": "cover",
-          "imageBackgroundColor": "#FFFFFF",
-          "title": "Menu",
+          "title": @text,
           "text": "Please select",
-          "defaultAction": {
-              "type": "uri",
-              "label": "View detail",
-              "uri": "http://example.com/page/123"
-          },
           "actions": action
       }
     }
