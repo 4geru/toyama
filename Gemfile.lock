@@ -21,13 +21,9 @@ GEM
     dotenv (2.2.1)
     i18n (0.8.1)
     json (2.1.0)
-    levenshtein (0.2.2)
     line-bot-api (1.1.0)
-    mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
-    nokogiri (1.7.1)
-      mini_portile2 (~> 2.1.0)
     pg (0.20.0)
     rack (1.6.5)
     rack-protection (1.5.3)
@@ -79,9 +75,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (< 5.0.0)
   dotenv
-  levenshtein
   line-bot-api
-  nokogiri
   pg
   rake
   rspec (>= 3.0.0)
