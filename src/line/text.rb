@@ -19,6 +19,18 @@ def replyText(event)
       user.update({status: 'uploadPhoto'})
       message = Confirm.new("あんたカメラの情報教えてくれっけぇ", "写真アップロード確認中").create(actions)
       client.reply_message(event['replyToken'], message)
+    elsif event.message['text'] == "問い合わせしたい"
+      actions = user.places.map{|place|
+        { "type": "postback", "label": "#{place.name}", "data": "action=placeRequest&placeId=#{place.id}" }
+      }
+      if actions.empty?
+        message = { type: 'text', text: "場所の登録しとらんとね？" }
+        client.reply_message(event['replyToken'], message)
+      else
+        user.update({status: 'PlaceRequest'})
+        message = Button.new("雪情報確認中", "雪情報確認中", "あんたどこのの情報聞きたいけぇ").create(actions)
+        client.reply_message(event['replyToken'], message)
+      end
     else
       message = {
         type: 'text',

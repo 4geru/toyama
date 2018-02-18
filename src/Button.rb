@@ -1,7 +1,8 @@
 class Button
-  def initialize(text, altText)
-    @text = text
+  def initialize(title, altText, text)
+    @title = title
     @altText = altText
+    @text = text
   end
 
   def create(action)
@@ -10,8 +11,22 @@ class Button
       "altText": @altText,
       "template": {
           "type": "buttons",
-          "title": @text,
-          "text": "Please select",
+          "title": @title,
+          "text": @text,
+          "actions": action
+      }
+    }
+  end
+
+  def create_image(image, action)
+    {
+      "type": "template",
+      "altText": @altText,
+      "template": {
+          "type": "buttons",
+          "thumbnailImageUrl": image,
+          "title": @title,
+          "text": @text,
           "actions": action
       }
     }
