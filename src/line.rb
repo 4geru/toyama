@@ -8,6 +8,8 @@ require './src/line/text'
 require './src/line/location'
 require './src/line/image'
 
+require './src/lib/getDistance'
+
 require 'mini_magick'
 require 'cloudinary'
 

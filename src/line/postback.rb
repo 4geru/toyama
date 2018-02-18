@@ -12,16 +12,21 @@ def replyPostBack(event)
     place.update({name: data["name"]})
   elsif data["action"] == 'placeRequest'
     place = Place.find(data["placeId"])
-    image = "https://res.cloudinary.com/dzhcf23xd/image/upload/v1518922536/w5zsbeq0zae9u09ydiqk.jpg"#Photo.last.url
+
+    photo = Photo.all.min_by{|photo|
+      get_distance([place[:latitude], place[:longitude]], [photo[:latitude], photo[:longitude]])
+    }
+
+    image = photo.url
     actions = [
       { "type": "uri", "label": "マップを見る", "text": "", "uri": "line://nv/camera/" },
-      { "type": "postback", "label": "削除", "data": "action=placeDelete&placeId=#{place.id}" }
+      { "type": "postback", "label": "お気に入りの削除", "data": "action=placeDelete&placeId=#{place.id}" }
     ]
-    message = Button.new("雪情報確認中", "雪情報確認中", "あんたどこのの情報聞きたいけぇ").create_image(image, actions)
+    message = Button.new("雪情報確認中", "雪情報確認中", "#{place.name}付近の情報じゃ").create_image(image, actions)
     client.reply_message(event['replyToken'], message)
   elsif data["action"] == 'placeDelete'
     place = Place.find(data["placeId"])
-    message = { type: 'text', text: "#{place.name}を削除したよ。" }
+    message = { type: 'text', text: "#{place.name}をお気に入りから削除したよ。" }
     client.reply_message(event['replyToken'], message)
     place.delete
   end
