@@ -18,7 +18,7 @@ def replyPostBack(event)
 
     image = photo.url
     actions = [
-      { "type": "uri", "label": "マップを見る", "text": "", "uri": "line://nv/camera/" },
+      { "type": "uri", "label": "マップを見る", "text": "", "uri": "https://secreto-tokyo.com/yukibot/yukimap.html?lat=#{place[:latitude]}&lng=#{place[:longitude]}" },
       { "type": "postback", "label": "お気に入りの削除", "data": "action=placeDelete&placeId=#{place.id}" }
     ]
     message = Button.new("#{place.name}", "雪情報確認中", "今日の#{place.name}付近の情報じゃ").create_image(image, actions)

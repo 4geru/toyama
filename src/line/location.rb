@@ -16,5 +16,16 @@ def replyLocation(event)
 
     client.reply_message(event['replyToken'], [okSticky, message])
     user.update({status: nil})
+  elsif status == 'placeRequest'
+
+    photo = Photo.all.min_by{|photo|
+      get_distance([event.message['latitude'], event.message['longitude']], [photo[:latitude], photo[:longitude]])
+    }
+    image = photo.url
+    actions = [
+      { "type": "uri", "label": "マップを見る", "text": "", "uri": "https://secreto-tokyo.com/yukibot/yukimap.html?lat=#{event.message['latitude']}&lng=#{event.message['longitude']}" },
+    ]
+    message = Button.new("地図検索結果", "地図検索結果表示中", "指定した場所付近の情報じゃ").create_image(image, actions)
+    client.reply_message(event['replyToken'], message)
   end
 end

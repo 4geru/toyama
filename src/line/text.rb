@@ -21,13 +21,16 @@ def replyText(event)
     elsif event.message['text'] == "雪の情報を見たい"
       actions = user.places.map{|place|
         { "type": "postback", "label": "#{place.name}", "data": "action=placeRequest&placeId=#{place.id}" }
-      }
+      }[0...3]
       if actions.empty?
         message = { type: 'text', text: "場所の登録しとらんとね？" }
         client.reply_message(event['replyToken'], message)
       else
-        user.update({status: 'PlaceRequest'})
-        message = Button.new("雪情報確認中", "雪情報確認中", "あんたどこのの情報聞きたいけぇ").create(actions)
+        user.update({status: 'placeRequest'})
+        image = Photo.all.shuffle.first.url
+        text = "あんたどこのの情報聞きたいけぇ" + (actions.length == 3 ? "\nお気に入りが3件以上だからシャッフルするね" : "")
+        actions << { "type": "uri", "label": "地図から検索する", "uri": "line://nv/location/" }
+        message = Button.new("雪情報確認中", "雪情報確認中", text ).create_image(image, actions)
         client.reply_message(event['replyToken'], message)
       end
     else
