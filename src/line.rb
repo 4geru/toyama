@@ -19,9 +19,9 @@ def client
 end
 
 Cloudinary.config do |config|
-  config.cloud_name = "xxx" || ENV['CLOUD_NAME']
-  config.api_key    = "xxx" || ENV['CLOUDINARY_API_KEY']
-  config.api_secret = "xxx" || ENV['CLOUDINARY_API_SECRET']
+  config.cloud_name = "dzhcf23xd" || ENV['CLOUD_NAME']
+  config.api_key    = "873287313676422" || ENV['CLOUDINARY_API_KEY']
+  config.api_secret = "odnTOp_OqmGma8FTCpASqiZ4QDM" || ENV['CLOUDINARY_API_SECRET']
 end
 
 post '/callback' do
@@ -36,14 +36,7 @@ post '/callback' do
   events.each { |event|
     case event
     when Line::Bot::Event::Message
-      puts event.type
       User.find_or_create_by({user_id: event["source"]["userId"]})
-      if event["source"]["type"] == "group"
-        group = Group.where({group_id: event["source"]["groupId"]}).first
-        user  = User.where( {user_id:  event["source"]["userId"] }).first
-
-        UserGroup.find_or_create_by({group_id: group.id, user_id: user.id})
-      end
       case event.type
       when Line::Bot::Event::MessageType::Text
         replyText(event)
