@@ -3,7 +3,7 @@ def replyText(event)
   user = User.where({user_id: event["source"]["userId"]}).first
   status = User.where({user_id: event["source"]["userId"]}).first.status
   if status == nil
-    if event.message['text'] == "追加"
+    if event.message['text'] == "場所を登録したい"
       actions = [
         { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/location/" },
         { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
@@ -11,15 +11,7 @@ def replyText(event)
       user.update({status: 'settingPlace'})
       message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
       client.reply_message(event['replyToken'], message)
-    elsif event.message['text'] == "聞く"
-      actions = [
-        { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/location/" },
-        { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
-      ]
-      user.update({status: 'settingPlace'})
-      message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
-      client.reply_message(event['replyToken'], message)
-    elsif event.message['text'] == "写真"
+    elsif event.message['text'] == "写真あげたい"
       actions = [
         { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/camera/" },
         { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
@@ -43,5 +35,7 @@ def replyText(event)
     # 文字列が長い場合の処理
     message = Confirm.new("#{event.message['text']}を登録しますか？", "場所情報確認中").create(actions)
     client.reply_message(event['replyToken'], message)
+  else
+    user.update({status: nil})
   end
 end

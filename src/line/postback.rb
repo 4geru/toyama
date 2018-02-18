@@ -3,7 +3,7 @@ def replyPostBack(event)
   user = User.where({user_id: event["source"]["userId"]}).first
   puts data
   if data["action"] == 'placeCancel'
-    message = { type: 'text', text: '追加をキャンセルしました。' }
+    message = { type: 'text', text: 'キャンセルしました。' }
     client.reply_message(event['replyToken'], message)
   elsif data["action"] == 'placeAccept'
     message = { type: 'text', text: "#{data["name"]}を追加しました。" }
