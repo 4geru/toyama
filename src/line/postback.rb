@@ -1,13 +1,12 @@
 def replyPostBack(event)
   data = Hash[URI::decode_www_form(event["postback"]["data"])]
   user = User.where({user_id: event["source"]["userId"]}).first
-  puts data
   if data["action"] == 'placeCancel'
-    message = { type: 'text', text: 'キャンセルしました。' }
+    message = { type: 'text', text: 'キャンセルしたよ。' }
     client.reply_message(event['replyToken'], message)
   elsif data["action"] == 'placeAccept'
-    message = { type: 'text', text: "#{data["name"]}を追加しました。" }
-    client.reply_message(event['replyToken'], message)
+    message = { type: 'text', text: "#{data["name"]}を追加したよ。" }
+    client.reply_message(event['replyToken'], [okSticky, message])
     place = user.places.last
     place.update({name: data["name"]})
   elsif data["action"] == 'placeRequest'

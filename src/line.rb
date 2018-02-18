@@ -9,6 +9,7 @@ require './src/line/location'
 require './src/line/image'
 
 require './src/lib/getDistance'
+require './src/lib/sticky'
 
 require 'mini_magick'
 require 'cloudinary'

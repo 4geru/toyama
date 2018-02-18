@@ -10,16 +10,15 @@ def replyText(event)
       ]
       user.update({status: 'settingPlace'})
       message = Confirm.new("あんたよういく場所地図で教えてくれっけぇ", "場所情報登録中").create(actions)
-      client.reply_message(event['replyToken'], message)
+      client.reply_message(event['replyToken'], [okSticky, message])
     elsif event.message['text'] == "写真あげたい"
       actions = [
         { "type": "uri", "label": "いいよ", "text": "", "uri": "line://nv/camera/" },
         { "type": "postback", "label": "やだ", "data": "action=placeCancel" }
       ]
-      user.update({status: 'uploadPhoto'})
       message = Confirm.new("あんたカメラの情報教えてくれっけぇ", "写真アップロード確認中").create(actions)
-      client.reply_message(event['replyToken'], message)
-    elsif event.message['text'] == "問い合わせしたい"
+      client.reply_message(event['replyToken'], [photoSticky, message] )
+    elsif event.message['text'] == "雪の情報を見たい"
       actions = user.places.map{|place|
         { "type": "postback", "label": "#{place.name}", "data": "action=placeRequest&placeId=#{place.id}" }
       }
@@ -41,11 +40,11 @@ def replyText(event)
   elsif status == 'settingPlace'
     encode = URI::encode_www_form({action: 'placeAccept', name: event.message['text']})
     actions = [
-      { "type": "postback", "label": "Yes", "data": "#{encode}" },
-      { "type": "postback", "label": "No",  "data": "action=placeCancel" }
+      { "type": "postback", "label": "する", "data": "#{encode}" },
+      { "type": "postback", "label": "しない",  "data": "action=placeCancel" }
     ]
     # 文字列が長い場合の処理
-    message = Confirm.new("#{event.message['text']}を登録しますか？", "場所情報確認中").create(actions)
+    message = Confirm.new("#{event.message['text']}を登録する？", "場所情報確認中").create(actions)
     client.reply_message(event['replyToken'], message)
   else
     user.update({status: nil})

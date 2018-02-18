@@ -7,13 +7,14 @@ def replyLocation(event)
   puts status
   if status == 'settingPlace'
     Place.create({latitude: event.message['latitude'], longitude: event.message['longitude'], user_id: user.id})
-    message = { type: 'text', text: '名前は何にしますか？' }
-    client.reply_message(event['replyToken'], message)
+    message = { type: 'text', text: '名前は何にする？' }
+    client.reply_message(event['replyToken'], [questionSticky, message])
   elsif status == 'uploadPhoto'
     photo = user.photos.last
     photo.update({latitude: event.message['latitude'], longitude: event.message['longitude']})
-    message = { type: 'text', text: '登録しました。' }
-    client.reply_message(event['replyToken'], message)
+    message = { type: 'text', text: '登録したよー' }
+
+    client.reply_message(event['replyToken'], [okSticky, message])
     user.update({status: nil})
   end
 end
