@@ -7,6 +7,8 @@ gem 'sinatra-contrib'
 gem "activerecord", "< 5.0.0"
 gem 'sinatra-activerecord'
 gem 'line-bot-api'
+gem "sinatra-cross_origin", "~> 0.3.1"
+
 # test
 gem "rspec", ">= 3.0.0"
 
